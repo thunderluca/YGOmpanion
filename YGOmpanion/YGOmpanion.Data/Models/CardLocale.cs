@@ -1,6 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System;
-using YGOmpanion.Data.Converters;
 
 namespace YGOmpanion.Data.Models
 {
@@ -13,7 +11,7 @@ namespace YGOmpanion.Data.Models
         public string[] Rarities { get; set; }
 
         [JsonProperty("date")]
-        [JsonConverter(typeof(CustomDateConverter))]
-        public DateTime Date { get; set; }
+        //[JsonConverter(typeof(CustomDateConverter))]
+        public string Date { get; set; }
     }
 }

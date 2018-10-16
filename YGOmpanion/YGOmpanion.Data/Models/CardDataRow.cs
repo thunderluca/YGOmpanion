@@ -1,5 +1,6 @@
 ﻿using FileHelpers;
 using Newtonsoft.Json;
+using System.Linq;
 
 namespace YGOmpanion.Data.Models
 {
@@ -41,6 +42,28 @@ namespace YGOmpanion.Data.Models
         [FieldConverter(ConverterKind.Boolean)]
         public bool IsXyz;
 
+        [FieldHidden]
+        public CardType CardType
+        {
+            get
+            {
+                if (!this.IsFusion && !this.IsLink && !this.IsPendulum && !this.IsSynchro && !this.IsXyz)
+                {
+                    return this.MonsterTypes.Length > 1 ? CardType.Effect : CardType.Normal;
+                }
+                
+                if (this.IsFusion) return CardType.Fusion;
+
+                if (this.IsLink) return CardType.Link;
+
+                if (this.IsPendulum) return CardType.Pendulum;
+
+                if (this.IsSynchro) return CardType.Synchro;
+
+                return CardType.Xyz;
+            }
+        }
+
         [FieldQuoted('"', QuoteMode.OptionalForBoth)]
         public string LinkMarkers;
 
@@ -69,9 +92,11 @@ namespace YGOmpanion.Data.Models
         {
             get
             {
-                if (string.IsNullOrWhiteSpace(this.MonsterTypes)) return new string[0];
+                var monsterTypes = new[] { this.Type };
 
-                return JsonConvert.DeserializeObject<string[]>(this.MonsterTypes.Trim());
+                if (string.IsNullOrWhiteSpace(this.MonsterTypes)) return monsterTypes;
+
+                return monsterTypes.Concat(JsonConvert.DeserializeObject<string[]>(this.MonsterTypes.Trim())).ToArray();
             }
         }
 
