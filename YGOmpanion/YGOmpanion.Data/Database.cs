@@ -1,7 +1,5 @@
-﻿using FileHelpers;
-using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
+﻿using System.Collections.Generic;
+using YGOmpanion.Data.Helpers;
 using YGOmpanion.Data.Models;
 
 namespace YGOmpanion.Data
@@ -14,31 +12,7 @@ namespace YGOmpanion.Data
 
         public Database()
         {
-            this.CardData = ReadFile(@namespace + ".YGO_Cards_v2.csv");
-        }
-
-        private static CardDataRow[] ReadFile(string fileName)
-        {
-            var cardData = new List<CardDataRow>();
-
-            using (var stream = typeof(Database).GetTypeInfo().Assembly.GetManifestResourceStream(@namespace + ".YGO_Cards_v2.csv"))
-            {
-                using (var reader = new StreamReader(stream))
-                {
-                    using (var engine = new FileHelperAsyncEngine<CardDataRow>())
-                    {
-                        using (engine.BeginReadStream(reader))
-                        {
-                            foreach (var cardDataRow in engine)
-                            {
-                                cardData.Add(cardDataRow);
-                            }
-                        }
-                    }
-                }
-            }
-
-            return cardData.ToArray();
+            this.CardData = CsvHelper.ReadFile<CardDataRow>(@namespace + ".YGO_Cards_v2.csv");
         }
     }
 }
