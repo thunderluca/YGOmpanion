@@ -1,7 +1,9 @@
 ﻿using Autofac;
 using Autofac.Extras.CommonServiceLocator;
 using CommonServiceLocator;
-using YGOmpanion.Data;
+using Xamarin.Forms;
+using YGOmpanion.Data.Services;
+using YGOmpanion.Services;
 
 namespace YGOmpanion.ViewModels
 {
@@ -11,7 +13,9 @@ namespace YGOmpanion.ViewModels
         {
             var builder = new ContainerBuilder();
 
-            builder.RegisterInstance(new Database());
+            var databasePath = DependencyService.Get<IPlatformService>().GetDatabaseFilePath();
+
+            builder.Register(c => new LocalDataService(databasePath)).As<IDataService>().InstancePerLifetimeScope();
             builder.RegisterType<SearchViewModel>().AsSelf();
 
             var container = builder.Build();

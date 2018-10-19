@@ -9,11 +9,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YGOmpanion.iOS", "YGOmpanio
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YGOmpanion.UWP", "YGOmpanion\YGOmpanion.UWP\YGOmpanion.UWP.csproj", "{98C2452F-5B3E-4D63-BE3A-08E78108A45B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YGOmpanion", "YGOmpanion\YGOmpanion\YGOmpanion.csproj", "{6F7B99AE-E0BC-41E4-9873-F535323BBAC7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YGOmpanion", "YGOmpanion\YGOmpanion\YGOmpanion.csproj", "{6F7B99AE-E0BC-41E4-9873-F535323BBAC7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YGOmpanion.Data", "YGOmpanion\YGOmpanion.Data\YGOmpanion.Data.csproj", "{CB41BD66-3F1F-43E1-AF3B-04C964CE897C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YGOmpanion.Data", "YGOmpanion\YGOmpanion.Data\YGOmpanion.Data.csproj", "{CB41BD66-3F1F-43E1-AF3B-04C964CE897C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YGOmpanion.Console", "YGOmpanion\YGOmpanion.Console\YGOmpanion.Console.csproj", "{EA921758-8E3D-4631-B300-39D68B00173B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YGOmpanion.Console", "YGOmpanion\YGOmpanion.Console\YGOmpanion.Console.csproj", "{EA921758-8E3D-4631-B300-39D68B00173B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -5,18 +5,23 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="YGO_Cards_v2.csv" />
+    <None Remove="cards.db" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="YGO_Cards_v2.csv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <EmbeddedResource Include="cards.db">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="FileHelpers" Version="3.3.0" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="sqlite-net-pcl" Version="1.5.231" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Helpers\" />
   </ItemGroup>
 
 </Project>

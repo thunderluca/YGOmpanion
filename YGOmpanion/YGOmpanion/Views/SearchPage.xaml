@@ -27,34 +27,41 @@
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <Grid Padding="10">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
+                            <Grid BackgroundColor="{Binding Type, Converter={StaticResource CardTypeToBottomBackgroundColorConverter}}">
+                                <Grid Padding="10">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
 
-                                <Grid.RowDefinitions>
-                                    <RowDefinition />
-                                    <RowDefinition />
-                                    <RowDefinition />
-                                </Grid.RowDefinitions>
-                                
-                                <Label Grid.Column="0"
-                                       Grid.ColumnSpan="3"
-                                       Text="{Binding Name}" />
-                                <Label Grid.Column="0"
-                                       Grid.Row="1"
-                                       Text="{Binding Attribute}" />
-                                <Label Grid.Column="1"                                  
-                                       Grid.Row="1"
-                                       Text="{Binding Type}" />
-                                <Label Grid.Column="0" 
-                                       Grid.Row="2"
-                                       Text="{Binding Attack}" />
-                                <Label Grid.Column="1"
-                                       Grid.Row="2"
-                                       Text="{Binding Defense}" />
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+
+                                    <Label Grid.Column="0"
+                                           Grid.ColumnSpan="3"
+                                           TextColor="{Binding Type, Converter={StaticResource CardTypeToForegroundColorConverter}}"    
+                                           Text="{Binding Name}" />
+                                    <Label Grid.Column="0"
+                                           Grid.Row="1"
+                                           TextColor="{Binding Type, Converter={StaticResource CardTypeToForegroundColorConverter}}"
+                                           Text="{Binding Attribute}" />
+                                    <Label Grid.Column="1"                                  
+                                           Grid.Row="1"
+                                           TextColor="{Binding Type, Converter={StaticResource CardTypeToForegroundColorConverter}}"
+                                           Text="{Binding Type}" />
+                                    <Label Grid.Column="0" 
+                                           Grid.Row="2"
+                                           TextColor="{Binding Type, Converter={StaticResource CardTypeToForegroundColorConverter}}"
+                                           Text="{Binding Attack}" />
+                                    <Label Grid.Column="1"
+                                           Grid.Row="2"
+                                           TextColor="{Binding Type, Converter={StaticResource CardTypeToForegroundColorConverter}}"
+                                           Text="{Binding Defense}" />
+                                </Grid>
                             </Grid>
                         </ViewCell>
                     </DataTemplate>

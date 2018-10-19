@@ -260,3 +260,4 @@ paket-files/
 __pycache__/
 *.pyc
 /YGOmpanion/YGOmpanion.Data/YGO_Cards_v2.csv
+/YGOmpanion/YGOmpanion.Data/cards.db

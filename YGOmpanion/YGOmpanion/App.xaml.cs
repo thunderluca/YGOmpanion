@@ -1,5 +1,7 @@
 ﻿using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using YGOmpanion.Helpers;
+using YGOmpanion.Services;
 using YGOmpanion.Views;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
@@ -10,6 +12,10 @@ namespace YGOmpanion
         public App()
         {
             InitializeComponent();
+
+            var platformService = DependencyService.Get<IPlatformService>();
+
+            StorageHelper.CopyCardsDb(platformService.GetDatabaseFilePath());
 
             MainPage = new NavigationPage(new MainPage());
         }

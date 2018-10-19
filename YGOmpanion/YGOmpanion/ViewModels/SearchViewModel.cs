@@ -3,18 +3,18 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using Xamarin.Forms;
-using YGOmpanion.Data;
 using YGOmpanion.Data.Models;
+using YGOmpanion.Data.Services;
 
 namespace YGOmpanion.ViewModels
 {
     public class SearchViewModel : BaseViewModel
     {
-        private readonly Database Database;
+        private readonly IDataService DataService;
 
-        public SearchViewModel(Database database)
+        public SearchViewModel(IDataService dataService)
         {
-            Database = database ?? throw new ArgumentNullException(nameof(database));
+            DataService = dataService ?? throw new ArgumentNullException(nameof(dataService));
 
             FoundCards = new ObservableCollection<Card>();
 
@@ -32,7 +32,7 @@ namespace YGOmpanion.ViewModels
 
         public ICommand SearchCommand { get; }
 
-        private void Search()
+        private async void Search()
         {
             if (IsBusy) return;
 
@@ -46,14 +46,15 @@ namespace YGOmpanion.ViewModels
                 return;
             }
 
-            var foundCards = Database.CardData.Contains(this.Query).Select(ToCard).ToArray();
-            if (foundCards?.Length == 0)
+            var foundCards = await DataService.SearchAsync(this.Query);
+            if (foundCards?.Count == 0)
             {
                 IsBusy = false;
                 return;
             }
 
-            foreach (var card in foundCards)
+            var cards = foundCards.Select(ToCard).ToArray();
+            foreach (var card in cards)
             {
                 this.FoundCards.Add(card);
             }
@@ -61,16 +62,16 @@ namespace YGOmpanion.ViewModels
             IsBusy = false;
         }
 
-        private static Card ToCard(CardDataRow card)
+        private static Card ToCard(Data.Models.Card card)
         {
             return new Card
             {
-                Name = card.CardName,
+                Name = card.Name,
                 Attribute = card.Attribute,
-                MonsterTypes = string.Join("/", card.CardMonsterTypes),
-                Attack = string.IsNullOrWhiteSpace(card.Attack) ? "-" : card.Attack.Trim(),
-                Defense = string.IsNullOrWhiteSpace(card.Defense) ? "-" : card.Defense.Trim(),
-                Type = card.CardType
+                MonsterTypes = card.Race + "/" + card.Type,
+                Attack = card.IsMonster() ? card.Attack < 0 ? "?" : card.Attack.ToString() : string.Empty,
+                Defense = card.IsMonster() ? card.Defense < 0 ? "?" : card.Defense.ToString() : string.Empty,
+                Type = card.GetCardType()
             };
         }
 

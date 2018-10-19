@@ -6,9 +6,13 @@
         {
             System.Console.WriteLine("Starting...");
 
-            var database = new Data.Database();
+            var localDataService = new Data.Services.LocalDataService();
 
-            System.Console.WriteLine("Ready! Found " + database.CardData.Count + " cards");
+            var task = localDataService.GetDataAsync(0, 6000);
+
+            task.Wait();
+
+            System.Console.WriteLine("Ready! Found " + task.Result.Count + " cards");
 
             System.Console.ReadKey();
         }
