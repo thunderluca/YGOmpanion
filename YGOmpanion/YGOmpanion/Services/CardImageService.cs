@@ -15,7 +15,8 @@ namespace YGOmpanion.Services
             this.Client = new HttpClient();
         }
 
-        const string origin = "http://yugioh.wikia.com";
+        const string BaseUrl = "http://yugioh.wikia.com";
+        const string ErrorResponseJson = "[]";
 
         static readonly string[] ExcludedPatterns = new[]
         {
@@ -28,7 +29,7 @@ namespace YGOmpanion.Services
         {
             if (string.IsNullOrWhiteSpace(cardName)) return null;
 
-            var url = origin + "/api.php?format=json&action=imageserving&wisTitle=" + WebUtility.UrlEncode(cardName);
+            var url = BaseUrl + "/api.php?format=json&action=imageserving&wisTitle=" + WebUtility.UrlEncode(cardName);
 
             var requestTask = this.Client.GetAsync(new Uri(url));
 
@@ -39,8 +40,19 @@ namespace YGOmpanion.Services
             var responseContent = await requestTask.Result.Content.ReadAsStringAsync();
             if (string.IsNullOrWhiteSpace(responseContent)) return null;
 
-            var imageResponse = JsonConvert.DeserializeObject<ImageResponse>(responseContent);
-            return imageResponse?.Image?.ImageServing;
+            responseContent = responseContent.Trim();
+
+            if (string.Equals(ErrorResponseJson, responseContent, StringComparison.OrdinalIgnoreCase)) return null;
+
+            try
+            {
+                var imageResponse = JsonConvert.DeserializeObject<ImageResponse>(responseContent);
+                return imageResponse?.Image?.ImageServing;
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         class ImageResponse

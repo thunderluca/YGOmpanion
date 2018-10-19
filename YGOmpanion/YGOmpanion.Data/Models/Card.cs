@@ -25,5 +25,7 @@
         public string Attribute { get; set; }
         
         public string Category { get; set; }
+
+        public string ImageUrl { get; set; }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 using YGOmpanion.Data.Models;
@@ -76,7 +75,7 @@ namespace YGOmpanion.ViewModels
                 Attack = card.IsMonster() ? card.Attack < 0 ? "?" : card.Attack.ToString() : string.Empty,
                 Defense = card.IsMonster() ? card.Defense < 0 ? "?" : card.Defense.ToString() : string.Empty,
                 Type = card.GetCardType(),
-                ImageUrl = this.CardImageService.GetImageUrlAsync(card.Name).Result
+                ImageUrl = card.ImageUrl
             };
         }
 
