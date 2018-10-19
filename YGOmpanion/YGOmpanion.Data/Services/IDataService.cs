@@ -9,5 +9,7 @@ namespace YGOmpanion.Data.Services
         Task<List<Card>> GetDataAsync(int page, int pageSize);
 
         Task<List<Card>> SearchAsync(string query);
+
+        Task<int> UpdateImageUrlAsync(int id, string imageUrl);
     }
 }

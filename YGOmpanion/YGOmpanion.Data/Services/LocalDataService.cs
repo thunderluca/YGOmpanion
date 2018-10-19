@@ -37,6 +37,13 @@ namespace YGOmpanion.Data.Services
             return this.SQLiteConnection.QueryAsync<Card>(sqliteQuery);
         }
 
+        public Task<int> UpdateImageUrlAsync(int id, string imageUrl)
+        {
+            var sqliteQuery = "UPDATE texts SET image = " + imageUrl + " WHERE id = " + id;
+
+            return this.SQLiteConnection.ExecuteAsync(sqliteQuery);
+        }
+
         private static string BuildBaseSqlQuery()
         {
             return "SELECT txt.id Id, txt.name Name, txt.description Description, d.setcode SetCode, t.id as TypeId"
