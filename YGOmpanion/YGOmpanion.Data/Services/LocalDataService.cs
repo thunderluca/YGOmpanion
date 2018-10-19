@@ -39,7 +39,7 @@ namespace YGOmpanion.Data.Services
 
         public Task<int> UpdateImageUrlAsync(int id, string imageUrl)
         {
-            var sqliteQuery = "UPDATE texts SET image = " + imageUrl + " WHERE id = " + id;
+            var sqliteQuery = "UPDATE texts SET image = '" + imageUrl + "' WHERE id = " + id;
 
             return this.SQLiteConnection.ExecuteAsync(sqliteQuery);
         }

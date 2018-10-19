@@ -63,12 +63,24 @@ namespace YGOmpanion.ViewModels
             }
 
             IsBusy = false;
+
+            foreach (var card in this.FoundCards)
+            {
+                if (!string.IsNullOrWhiteSpace(card.ImageUrl)) continue;
+
+                var imageUrl = await this.CardImageService.GetImageUrlAsync(card.Name);
+
+                await this.DataService.UpdateImageUrlAsync(card.Id, imageUrl);
+
+                card.ImageUrl = imageUrl;
+            }
         }
 
         private Card ToCard(Data.Models.Card card)
         {
             return new Card
             {
+                Id = card.Id,
                 Name = card.Name,
                 Attribute = card.Attribute,
                 MonsterTypes = card.Race + "/" + card.Type,
@@ -79,8 +91,10 @@ namespace YGOmpanion.ViewModels
             };
         }
 
-        public class Card
+        public class Card : BaseViewModel
         {
+            public int Id { get; set; }
+
             public string Name { get; set; }
 
             public string MonsterTypes { get; set; }
