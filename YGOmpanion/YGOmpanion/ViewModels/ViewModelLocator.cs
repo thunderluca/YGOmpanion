@@ -16,6 +16,7 @@ namespace YGOmpanion.ViewModels
             var databasePath = DependencyService.Get<IPlatformService>().GetDatabaseFilePath();
 
             builder.Register(c => new LocalDataService(databasePath)).As<IDataService>().InstancePerLifetimeScope();
+            builder.Register(c => new CardImageService()).As<ICardImageService>();
             builder.RegisterType<SearchViewModel>().AsSelf();
 
             var container = builder.Build();

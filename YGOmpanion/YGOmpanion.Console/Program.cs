@@ -6,7 +6,7 @@
         {
             System.Console.WriteLine("Starting...");
 
-            var localDataService = new Data.Services.LocalDataService();
+            var localDataService = new Data.Services.LocalDataService("cards.db");
 
             var task = localDataService.GetDataAsync(0, 6000);
 

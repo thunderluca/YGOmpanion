@@ -1,20 +1,24 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 using YGOmpanion.Data.Models;
 using YGOmpanion.Data.Services;
+using YGOmpanion.Services;
 
 namespace YGOmpanion.ViewModels
 {
     public class SearchViewModel : BaseViewModel
     {
         private readonly IDataService DataService;
+        private readonly ICardImageService CardImageService;
 
-        public SearchViewModel(IDataService dataService)
+        public SearchViewModel(IDataService dataService, ICardImageService cardImageService)
         {
             DataService = dataService ?? throw new ArgumentNullException(nameof(dataService));
+            CardImageService = cardImageService ?? throw new ArgumentNullException(nameof(cardImageService));
 
             FoundCards = new ObservableCollection<Card>();
 
@@ -53,7 +57,7 @@ namespace YGOmpanion.ViewModels
                 return;
             }
 
-            var cards = foundCards.Select(ToCard).ToArray();
+            var cards = foundCards.Select(this.ToCard).ToArray();
             foreach (var card in cards)
             {
                 this.FoundCards.Add(card);
@@ -62,7 +66,7 @@ namespace YGOmpanion.ViewModels
             IsBusy = false;
         }
 
-        private static Card ToCard(Data.Models.Card card)
+        private Card ToCard(Data.Models.Card card)
         {
             return new Card
             {
@@ -71,7 +75,8 @@ namespace YGOmpanion.ViewModels
                 MonsterTypes = card.Race + "/" + card.Type,
                 Attack = card.IsMonster() ? card.Attack < 0 ? "?" : card.Attack.ToString() : string.Empty,
                 Defense = card.IsMonster() ? card.Defense < 0 ? "?" : card.Defense.ToString() : string.Empty,
-                Type = card.GetCardType()
+                Type = card.GetCardType(),
+                ImageUrl = this.CardImageService.GetImageUrlAsync(card.Name).Result
             };
         }
 
@@ -88,6 +93,8 @@ namespace YGOmpanion.ViewModels
             public string Defense { get; set; }
 
             public CardType Type { get; set; }
+
+            public string ImageUrl { get; set; }
         }
     }
 }
