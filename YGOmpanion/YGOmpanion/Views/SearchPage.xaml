@@ -22,7 +22,8 @@
                       VerticalOptions="FillAndExpand"
                       IsPullToRefreshEnabled="true"
                       IsRefreshing="{Binding IsBusy, Mode=OneWay}"
-                      CachingStrategy="RecycleElement">
+                      CachingStrategy="RecycleElement"
+                      IsVisible="{Binding ShowEmptyCardsListMessage, Mode=OneWay, Converter={StaticResource BooleanToOppositeBooleanConverter}}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
@@ -43,8 +44,14 @@
 
                                     <Image Grid.Column="0"
                                            Grid.Row="0"
-                                           Grid.RowSpan="3"
-                                           Source="{Binding ImageUrl}" />
+                                           Grid.RowSpan="3">
+                                        <Image.Source>
+                                            <UriImageSource
+                                                Uri="{Binding ImageUrl, Mode=OneWay}"
+                                                CachingEnabled="True"
+                                                CacheValidity="3660" />
+                                        </Image.Source>
+                                    </Image>
 
                                     <Label Grid.Column="1"
                                            Grid.ColumnSpan="3"
@@ -57,7 +64,7 @@
                                     <Label Grid.Column="2"                                  
                                            Grid.Row="1"
                                            TextColor="{Binding Type, Converter={StaticResource CardTypeToForegroundColorConverter}}"
-                                           Text="{Binding Type}" />
+                                           Text="{Binding CardTypes}" />
                                     <Label Grid.Column="1" 
                                            Grid.Row="2"
                                            TextColor="{Binding Type, Converter={StaticResource CardTypeToForegroundColorConverter}}"
@@ -72,6 +79,11 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
+
+            <Label Grid.Row="1" 
+                   Text="No cards found"
+                   Margin="10"
+                   IsVisible="{Binding ShowEmptyCardsListMessage, Mode=OneWay}" />
         </Grid>
     </ContentPage.Content>
 </ContentPage>

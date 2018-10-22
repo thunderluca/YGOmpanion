@@ -12,6 +12,7 @@
                 <Setter Property="BarBackgroundColor" Value="{StaticResource NavigationPrimary}" />
                 <Setter Property="BarTextColor" Value="White" />
             </Style>
+            <c:BooleanToOppositeBooleanConverter x:Key="BooleanToOppositeBooleanConverter" />
             <c:CardTypeToBottomBackgroundColorConverter x:Key="CardTypeToBottomBackgroundColorConverter" />
             <c:CardTypeToForegroundColorConverter x:Key="CardTypeToForegroundColorConverter" />
             <c:CardTypeToTopBackgroundColorConverter x:Key="CardTypeToTopBackgroundColorConverter" />

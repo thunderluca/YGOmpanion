@@ -1,8 +1,8 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight.Command;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Windows.Input;
-using Xamarin.Forms;
 using YGOmpanion.Data.Models;
 using YGOmpanion.Data.Services;
 using YGOmpanion.Services;
@@ -20,41 +20,62 @@ namespace YGOmpanion.ViewModels
             CardImageService = cardImageService ?? throw new ArgumentNullException(nameof(cardImageService));
 
             FoundCards = new ObservableCollection<Card>();
-
-            SearchCommand = new Command(Search);
         }
 
-        string query = string.Empty;
+        private string query = string.Empty;
         public string Query
         {
             get { return query; }
-            set { SetProperty(ref query, value); }
+            set { Set(nameof(Query), ref query, value); }
         }
 
         public ObservableCollection<Card> FoundCards { get; set; }
 
-        public ICommand SearchCommand { get; }
+        private bool showEmptyCardsListMessage = false;
+        public bool ShowEmptyCardsListMessage
+        {
+            get { return showEmptyCardsListMessage; }
+            set { Set(nameof(ShowEmptyCardsListMessage), ref showEmptyCardsListMessage, value); }
+        }
+
+        private RelayCommand searchCommand;
+        public RelayCommand SearchCommand
+        {
+            get
+            {
+                if (searchCommand == null)
+                {
+                    searchCommand = new RelayCommand(Search);
+                }
+
+                return searchCommand;
+            }
+        }
 
         private async void Search()
         {
-            if (IsBusy) return;
+            if (this.IsBusy) return;
 
-            IsBusy = true;
+            this.IsBusy = true;
 
             this.FoundCards.Clear();
 
             if (string.IsNullOrWhiteSpace(this.Query))
             {
-                IsBusy = false;
+                this.ShowEmptyCardsListMessage = true;
+                this.IsBusy = false;
                 return;
             }
 
             var foundCards = await DataService.SearchAsync(this.Query);
             if (foundCards?.Count == 0)
             {
-                IsBusy = false;
+                this.ShowEmptyCardsListMessage = true;
+                this.IsBusy = false;
                 return;
             }
+
+            this.ShowEmptyCardsListMessage = false;
 
             var cards = foundCards.Select(this.ToCard).ToArray();
             foreach (var card in cards)
@@ -62,7 +83,9 @@ namespace YGOmpanion.ViewModels
                 this.FoundCards.Add(card);
             }
 
-            IsBusy = false;
+            this.IsBusy = false;
+
+            var newCardsImageUrlsList = new List<Tuple<int, string>>();
 
             foreach (var card in this.FoundCards)
             {
@@ -70,9 +93,14 @@ namespace YGOmpanion.ViewModels
 
                 var imageUrl = await this.CardImageService.GetImageUrlAsync(card.Name);
 
-                await this.DataService.UpdateImageUrlAsync(card.Id, imageUrl);
-
                 card.ImageUrl = imageUrl;
+
+                newCardsImageUrlsList.Add(Tuple.Create(card.Id, imageUrl));
+            }
+
+            foreach (var data in newCardsImageUrlsList)
+            {
+                await this.DataService.UpdateImageUrlAsync(data.Item1, data.Item2);
             }
         }
 
@@ -82,8 +110,8 @@ namespace YGOmpanion.ViewModels
             {
                 Id = card.Id,
                 Name = card.Name,
-                Attribute = card.Attribute,
-                MonsterTypes = card.Race + "/" + card.Type,
+                Attribute = card.IsMonster() ? card.Attribute : card.Attribute.Split('/')[card.IsMagic() ? 0 : 1],
+                CardTypes = card.IsMonster() ? card.Race + "/" + card.Type : card.Type,
                 Attack = card.IsMonster() ? card.Attack < 0 ? "?" : card.Attack.ToString() : string.Empty,
                 Defense = card.IsMonster() ? card.Defense < 0 ? "?" : card.Defense.ToString() : string.Empty,
                 Type = card.GetCardType(),
@@ -97,7 +125,7 @@ namespace YGOmpanion.ViewModels
 
             public string Name { get; set; }
 
-            public string MonsterTypes { get; set; }
+            public string CardTypes { get; set; }
 
             public string Attribute { get; set; }
 
@@ -107,7 +135,12 @@ namespace YGOmpanion.ViewModels
 
             public CardType Type { get; set; }
 
-            public string ImageUrl { get; set; }
+            private string imageUrl;
+            public string ImageUrl
+            {
+                get { return imageUrl; }
+                set { Set(nameof(ImageUrl), ref imageUrl, value); }
+            }
         }
     }
 }
