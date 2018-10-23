@@ -7,8 +7,6 @@
         public string Name { get; set; }
 
         public string Description { get; set; }
-
-        public long SetCode { get; set; }
         
         public int TypeId { get; set; }
 

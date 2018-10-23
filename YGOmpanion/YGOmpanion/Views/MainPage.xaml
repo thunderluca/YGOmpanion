@@ -1,13 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="YGOmpanion.Views.MainPage">
+             x:Class="YGOmpanion.Views.MainPage"
+             Title="{Binding Title, Mode=OneWay}"
+             BindingContext="{Binding Main, Source={StaticResource Locator}}">
     <ContentPage.Content>
         <StackLayout>
             <Button Text="Go to search"
-                    Clicked="Button_Clicked"
-                    HorizontalOptions="Center"
-                    VerticalOptions="Center" />
+                    Command="{Binding GoToSearchCommand}"
+                    HorizontalOptions="FillAndExpand"
+                    Margin="12" />
+            <Button Text="Go to decks"
+                    Command="{Binding GoToDecksCommand}"
+                    HorizontalOptions="FillAndExpand"
+                    Margin="12, 0" />
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

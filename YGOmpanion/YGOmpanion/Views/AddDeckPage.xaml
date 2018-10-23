@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="YGOmpanion.Views.AddDeckPage"
+             Title="{Binding Title, Mode=OneWay}"
+             BindingContext="{Binding AddDeck, Source={StaticResource Locator}}">
+    <ContentPage.Content>
+        <StackLayout>
+            <StackLayout>
+                <Editor Text="{Binding Name, Mode=TwoWay}"
+                        PlaceholderColor="{Binding ValidName, Mode=OneWay, Converter={StaticResource ValidationTextColorConverter}}"
+                        Placeholder="Name"
+                        Margin="12" />
+
+                <Editor Text="{Binding Description, Mode=TwoWay}"
+                        PlaceholderColor="{Binding ValidDescription, Mode=OneWay, Converter={StaticResource ValidationTextColorConverter}}"
+                        Placeholder="Description"
+                        Margin="12, 0" />
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Save" 
+                     Command="{Binding SaveCommand, Mode=OneWay}" />
+    </ContentPage.ToolbarItems>
+</ContentPage>

@@ -16,6 +16,7 @@
             <c:CardTypeToBottomBackgroundColorConverter x:Key="CardTypeToBottomBackgroundColorConverter" />
             <c:CardTypeToForegroundColorConverter x:Key="CardTypeToForegroundColorConverter" />
             <c:CardTypeToTopBackgroundColorConverter x:Key="CardTypeToTopBackgroundColorConverter" />
+            <c:ValidationTextColorConverter x:Key="ValidationTextColorConverter" />
             <vm:ViewModelLocator x:Key="Locator" />
         </ResourceDictionary>
     </Application.Resources>

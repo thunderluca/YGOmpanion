@@ -10,10 +10,5 @@ namespace YGOmpanion.Views
         {
             InitializeComponent();
         }
-
-        private void Button_Clicked(object sender, System.EventArgs e)
-        {
-            this.Navigation.PushAsync(new SearchPage());
-        }
     }
 }

@@ -1,7 +1,19 @@
-﻿namespace YGOmpanion.ViewModels
+﻿using System;
+using YGOmpanion.Services;
+
+namespace YGOmpanion.ViewModels
 {
-    public class BaseViewModel : GalaSoft.MvvmLight.ViewModelBase
+    public abstract class BaseViewModel : GalaSoft.MvvmLight.ViewModelBase
     {
+        public readonly GalaSoft.MvvmLight.Views.IDialogService DialogService;
+        public readonly INavigationService NavigationService;
+
+        public BaseViewModel(GalaSoft.MvvmLight.Views.IDialogService dialogService, INavigationService navigationService)
+        {
+            this.DialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
+            this.NavigationService = navigationService ?? throw new ArgumentNullException(nameof(navigationService));
+        }
+
         private bool isBusy = false;
         public bool IsBusy
         {

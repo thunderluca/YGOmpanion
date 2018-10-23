@@ -1,8 +1,9 @@
-﻿using Xamarin.Forms;
+﻿using Autofac;
+using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using YGOmpanion.Helpers;
 using YGOmpanion.Services;
-using YGOmpanion.Views;
+using YGOmpanion.ViewModels;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace YGOmpanion
@@ -17,7 +18,9 @@ namespace YGOmpanion
 
             StorageHelper.CopyCardsDb(platformService.GetDatabaseFilePath());
 
-            MainPage = new NavigationPage(new MainPage());
+            var navigationService = ViewModelLocator.Container.Resolve<INavigationService>();
+
+            MainPage = navigationService.SetRootPage(nameof(Views.MainPage));
         }
 
         protected override void OnStart()
