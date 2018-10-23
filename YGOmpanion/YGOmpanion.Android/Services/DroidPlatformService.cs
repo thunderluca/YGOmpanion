@@ -15,9 +15,14 @@ namespace YGOmpanion.Android.Services
             return new DialogService();
         }
         
-        public string GetDatabaseFilePath()
+        public string GetCardsDatabaseFilePath()
         {
             return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "cards.db");
+        }
+
+        public string GetDecksDatabaseFilePath()
+        {
+            return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "decks.db");
         }
     }
 }

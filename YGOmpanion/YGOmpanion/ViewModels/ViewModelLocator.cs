@@ -18,8 +18,12 @@ namespace YGOmpanion.ViewModels
             var platformService = DependencyService.Get<IPlatformService>();
 
             var navigationService = GetNavigationService();
+
+            var cardsDatabaseFilePath = platformService.GetCardsDatabaseFilePath();
+
+            var decksDatabaseFilePath = platformService.GetDecksDatabaseFilePath();
             
-            builder.Register(c => new LocalDataService(platformService.GetDatabaseFilePath())).As<IDataService>().InstancePerLifetimeScope();
+            builder.Register(c => new LocalDataService(cardsDatabaseFilePath, decksDatabaseFilePath)).As<IDataService>().InstancePerLifetimeScope();
             builder.Register(c => new CardImageService()).As<ICardImageService>();
             builder.Register(c => platformService.CreateDialogServiceInstance()).As<GalaSoft.MvvmLight.Views.IDialogService>();
             builder.Register(c => navigationService).As<INavigationService>();

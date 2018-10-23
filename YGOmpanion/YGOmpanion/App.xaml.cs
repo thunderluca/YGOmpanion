@@ -16,7 +16,7 @@ namespace YGOmpanion
 
             var platformService = DependencyService.Get<IPlatformService>();
 
-            StorageHelper.CopyCardsDb(platformService.GetDatabaseFilePath());
+            StorageHelper.CopyCardsDb(platformService.GetCardsDatabaseFilePath());
 
             var navigationService = ViewModelLocator.Container.Resolve<INavigationService>();
 

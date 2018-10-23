@@ -9,19 +9,21 @@ namespace YGOmpanion.Data.Services
 {
     public class LocalDataService : IDataService
     {
-        private readonly SQLiteAsyncConnection SQLiteConnection;
-        
-        public LocalDataService(string databasePath)
+        private readonly SQLiteAsyncConnection CardsConnection;
+        private readonly SQLiteAsyncConnection DecksConnection;
+
+        public LocalDataService(string cardsDatabasePath, string decksDatabasePath)
         {
-            this.SQLiteConnection = new SQLiteAsyncConnection(databasePath);
+            this.CardsConnection = new SQLiteAsyncConnection(cardsDatabasePath, SQLiteOpenFlags.ReadOnly);
+            this.DecksConnection = new SQLiteAsyncConnection(decksDatabasePath);
 
             this.CreateTables();
         }
 
         private async void CreateTables()
         {
-            await this.SQLiteConnection.CreateTableAsync<Deck>();
-            await this.SQLiteConnection.CreateTableAsync<DeckCard>();
+            await this.DecksConnection.CreateTableAsync<Deck>();
+            await this.DecksConnection.CreateTableAsync<DeckCard>();
         }
 
         public Task<List<Card>> GetCardsAsync(int page, int pageSize)
@@ -32,14 +34,14 @@ namespace YGOmpanion.Data.Services
                 + "ORDER BY txt.name ASC "
                 + "LIMIT " + pageSize + " OFFSET " + offset;
 
-            return this.SQLiteConnection.QueryAsync<Card>(sqliteQuery);
+            return this.CardsConnection.QueryAsync<Card>(sqliteQuery);
         }
 
         public Task<int> GetCardsCountAsync()
         {
             var sqliteQuery = "SELECT count(*) FROM datas";
 
-            return this.SQLiteConnection.ExecuteScalarAsync<int>(sqliteQuery);
+            return this.CardsConnection.ExecuteScalarAsync<int>(sqliteQuery);
         }
 
         public Task<List<Card>> SearchCardsAsync(string query)
@@ -51,54 +53,54 @@ namespace YGOmpanion.Data.Services
                 + "OR r.name LIKE '%" + query + "%' "
                 + "OR t.name LIKE '%" + query + "%'";
 
-            return this.SQLiteConnection.QueryAsync<Card>(sqliteQuery);
+            return this.CardsConnection.QueryAsync<Card>(sqliteQuery);
         }
 
-        public Task<int> UpdateCardImageUrlAsync(int id, string imageUrl)
-        {
-            var sqliteQuery = "UPDATE texts SET image = '" + imageUrl + "' WHERE id = " + id;
+        //public Task<int> UpdateCardImageUrlAsync(int id, string imageUrl)
+        //{
+        //    var sqliteQuery = "UPDATE texts SET image = '" + imageUrl + "' WHERE id = " + id;
 
-            return this.SQLiteConnection.ExecuteAsync(sqliteQuery);
-        }
+        //    return this.CardsConnection.ExecuteAsync(sqliteQuery);
+        //}
 
         public Task<Card> GetCardAsync(int id)
         {
             var sqliteQuery = BuildBaseCardSqlQuery() + "WHERE txt.id = " + id;
 
-            return this.SQLiteConnection.FindWithQueryAsync<Card>(sqliteQuery);
+            return this.CardsConnection.FindWithQueryAsync<Card>(sqliteQuery);
         }
 
         public Task<List<Deck>> GetDecksAsync(string query)
         {
-            var linqQuery = this.SQLiteConnection.Table<Deck>();
+            var decksQuery = this.DecksConnection.Table<Deck>();
             if (!string.IsNullOrWhiteSpace(query))
             {
-                linqQuery = linqQuery.Where(d => d.Name.Contains(query) || d.Description.Contains(query));
+                decksQuery = decksQuery.Where(d => d.Name.Contains(query) || d.Description.Contains(query));
             }
 
-            return linqQuery.OrderByDescending(d => d.CreatedOn).ToListAsync();
+            return decksQuery.OrderByDescending(d => d.CreatedOn).ToListAsync();
         }
 
         public Task<Deck> GetDeckAsync(int id)
         {
-            return this.SQLiteConnection.Table<Deck>().FirstOrDefaultAsync(d => d.Id == id);
+            return this.DecksConnection.Table<Deck>().FirstOrDefaultAsync(d => d.Id == id);
         }
 
         public Task<int> AddNewDeckAsync(Deck deck)
         {
-            return this.SQLiteConnection.InsertAsync(deck);
+            return this.DecksConnection.InsertAsync(deck);
         }
 
         public async Task<List<Tuple<Card, int>>> GetDeckCardsAsync(int id)
         {
-            var deckCards = await this.SQLiteConnection.Table<DeckCard>().Where(dc => dc.DeckId == id).ToListAsync();
+            var deckCards = await this.DecksConnection.Table<DeckCard>().Where(dc => dc.DeckId == id).ToListAsync();
             if (deckCards.Count == 0) return new List<Tuple<Card, int>>();
 
             var deckCardsIds = deckCards.Select(dc => dc.CardId).Distinct().OrderBy(i => i).ToArray();
 
             var sqliteQuery = BuildBaseCardSqlQuery() + "WHERE txt.id IN (" + string.Join(",", deckCardsIds) + ")";
 
-            var cards = await this.SQLiteConnection.QueryAsync<Card>(sqliteQuery);
+            var cards = await this.CardsConnection.QueryAsync<Card>(sqliteQuery);
             if (cards.Count == 0) return new List<Tuple<Card, int>>();
 
             var cardsList = new List<Tuple<Card, int>>();

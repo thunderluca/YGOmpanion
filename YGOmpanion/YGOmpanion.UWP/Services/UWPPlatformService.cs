@@ -15,9 +15,14 @@ namespace YGOmpanion.UWP.Services
             return new DialogService();
         }
 
-        public string GetDatabaseFilePath()
+        public string GetCardsDatabaseFilePath()
         {
             return Path.Combine(ApplicationData.Current.LocalFolder.Path, "cards.db");
+        }
+
+        public string GetDecksDatabaseFilePath()
+        {
+            return Path.Combine(ApplicationData.Current.LocalFolder.Path, "decks.db");
         }
     }
 }

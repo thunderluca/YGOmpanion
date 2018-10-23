@@ -1,6 +1,4 @@
-﻿using FileHelpers;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
 using System.Linq;
 
@@ -14,12 +12,14 @@ namespace YGOmpanion.Console
 
             var finalDbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "cards.db");
 
+            var finalDecksDbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "decks.db");
+
             if (!File.Exists(finalDbPath))
             {
                 File.Copy("cards.db", finalDbPath);
             }
 
-            var localDataService = new Data.Services.LocalDataService(finalDbPath);
+            var localDataService = new Data.Services.LocalDataService(finalDbPath, finalDecksDbPath);
 
             var cardImageService = new Services.CardImageService();
 
@@ -57,44 +57,44 @@ namespace YGOmpanion.Console
 
             System.Console.WriteLine("Found " + cards.Count + " cards to update");
 
-            var cardTuples = new List<Tuple<int, string>>();
+            //var cardTuples = new List<Tuple<int, string>>();
 
-            for (var i = 0; i < cards.Count; i++)
-            {
-                System.Console.WriteLine($"Processing {i + 1} of {cards.Count} cards");
+            //for (var i = 0; i < cards.Count; i++)
+            //{
+            //    System.Console.WriteLine($"Processing {i + 1} of {cards.Count} cards");
 
-                if (!string.IsNullOrWhiteSpace(cards[i].ImageUrl))
-                {
-                    cardTuples.Add(Tuple.Create(cards[i].Id, cards[i].ImageUrl));
-                    continue;
-                }
+            //    if (!string.IsNullOrWhiteSpace(cards[i].ImageUrl))
+            //    {
+            //        cardTuples.Add(Tuple.Create(cards[i].Id, cards[i].ImageUrl));
+            //        continue;
+            //    }
 
-                var imageUrlTask = cardImageService.GetImageUrlAsync(cards[i].Name);
+            //    var imageUrlTask = cardImageService.GetImageUrlAsync(cards[i].Name);
 
-                imageUrlTask.Wait();
+            //    imageUrlTask.Wait();
 
-                cardTuples.Add(Tuple.Create(cards[i].Id, imageUrlTask.Result));
+            //    cardTuples.Add(Tuple.Create(cards[i].Id, imageUrlTask.Result));
 
-                var updateTask = localDataService.UpdateCardImageUrlAsync(cards[i].Id, imageUrlTask.Result);
-                updateTask.Wait();
+            //    var updateTask = localDataService.UpdateCardImageUrlAsync(cards[i].Id, imageUrlTask.Result);
+            //    updateTask.Wait();
 
-                System.Threading.Thread.Sleep(new Random(Environment.TickCount).Next(500, 2000));
-            }
+            //    System.Threading.Thread.Sleep(new Random(Environment.TickCount).Next(500, 2000));
+            //}
 
-            var filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "imageUrls_1.csv");
+            //var filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "imageUrls_1.csv");
 
-            using (var fs = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.Write))
-            {
-                using (var writer = new StreamWriter(fs))
-                {
-                    foreach (var tuple in cardTuples)
-                    {
-                        writer.WriteLine(tuple.Item1 + ";" + tuple.Item2);
-                    }
+            //using (var fs = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.Write))
+            //{
+            //    using (var writer = new StreamWriter(fs))
+            //    {
+            //        foreach (var tuple in cardTuples)
+            //        {
+            //            writer.WriteLine(tuple.Item1 + ";" + tuple.Item2);
+            //        }
 
-                    writer.Flush();
-                }
-            }
+            //        writer.Flush();
+            //    }
+            //}
 
             System.Console.WriteLine("Press any key to exit");
 

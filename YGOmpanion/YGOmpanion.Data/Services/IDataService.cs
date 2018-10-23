@@ -23,6 +23,6 @@ namespace YGOmpanion.Data.Services
 
         Task<List<Tuple<Card, int>>> GetDeckCardsAsync(int id);
 
-        Task<int> UpdateCardImageUrlAsync(int id, string imageUrl);
+        //Task<int> UpdateCardImageUrlAsync(int id, string imageUrl);
     }
 }

@@ -6,6 +6,8 @@ namespace YGOmpanion.Services
     {
         IDialogService CreateDialogServiceInstance();
 
-        string GetDatabaseFilePath();
+        string GetCardsDatabaseFilePath();
+
+        string GetDecksDatabaseFilePath();
     }
 }
