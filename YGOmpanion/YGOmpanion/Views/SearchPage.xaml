@@ -37,7 +37,7 @@
                                        VerticalOptions="FillAndExpand" 
                                        Opacity="0.1"
                                        Aspect="AspectFill"
-                                       Source="{Binding ImageUrl, Mode=OneWay}" />
+                                       Source="{Binding ImageUrl}" />
 
                                 <Grid Padding="0,6,12,6">
                                     <Grid.ColumnDefinitions>
@@ -59,7 +59,7 @@
                                            Grid.RowSpan="4"
                                            Aspect="AspectFit"
                                            VerticalOptions="CenterAndExpand"
-                                           Source="{Binding ImageUrl, Mode=OneWay}">
+                                           Source="{Binding ImageUrl}">
                                     </Image>
 
                                     <Label Grid.Column="1"

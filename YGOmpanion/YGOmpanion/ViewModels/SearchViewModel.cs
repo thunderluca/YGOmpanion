@@ -95,15 +95,6 @@ namespace YGOmpanion.ViewModels
             }
 
             this.IsBusy = false;
-            
-            //foreach (var card in this.FoundCards)
-            //{
-            //    if (!string.IsNullOrWhiteSpace(card.ImageUrl)) continue;
-
-            //    var imageUrl = await this.CardImageService.GetImageUrlAsync(card.Name);
-
-            //    await this.DataService.UpdateCardImageUrlAsync(card.Id, imageUrl);
-            //}
         }
 
         private Card ToCard(Data.Models.Card card)
@@ -126,7 +117,7 @@ namespace YGOmpanion.ViewModels
             };
         }
         
-        public class Card : GalaSoft.MvvmLight.ViewModelBase
+        public class Card
         {
             public int Id { get; set; }
 
@@ -145,13 +136,8 @@ namespace YGOmpanion.ViewModels
             public CardType Type { get; set; }
 
             public bool IsMonster { get; set; }
-
-            private string imageUrl;
-            public string ImageUrl
-            {
-                get { return imageUrl; }
-                set { Set(nameof(ImageUrl), ref imageUrl, value); }
-            }
+            
+            public string ImageUrl { get; set; }
         }
     }
 }
