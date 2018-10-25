@@ -44,6 +44,8 @@ namespace YGOmpanion.Data.Services
             return this.CardsConnection.ExecuteScalarAsync<int>(sqliteQuery);
         }
 
+        //https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&cid=4027
+
         public Task<List<Card>> SearchCardsAsync(string query)
         {
             var sqliteQuery = BuildBaseCardSqlQuery()

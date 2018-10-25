@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="YGOmpanion.Views.CardDetailPage"
+             xmlns:parallax="clr-namespace:DevsDNA.XFParallax;assembly=DevsDNA.XFParallax"
+             Title="{Binding Title}"
+             BindingContext="{Binding CardDetail, Source={StaticResource Locator}}">
+    <ContentPage.Content>
+        <parallax:ParallaxView x:Name="MainParallaxView" 
+                               BodyMargin="0, 120, 0, 0" 
+                               HeaderScrollSpeed="4">
+            <parallax:ParallaxView.HeaderContent>
+                <ContentView HorizontalOptions="FillAndExpand" 
+                             VerticalOptions="FillAndExpand" 
+                             BackgroundColor="{StaticResource NavigationPrimary}">
+                    <Image HorizontalOptions="FillAndExpand"
+                           VerticalOptions="Start"
+                           Opacity="0.1"
+                           Aspect="AspectFill"
+                           Source="{Binding ImageUrl}" />
+                </ContentView>
+            </parallax:ParallaxView.HeaderContent>
+            <parallax:ParallaxView.BodyContent>
+                <ContentView HorizontalOptions="FillAndExpand" 
+                             VerticalOptions="FillAndExpand"
+                             BackgroundColor="White">
+                    <ContentView.Margin>
+                        <OnPlatform UWP="0, 120, 0, 0" />
+                    </ContentView.Margin>
+                    <StackLayout>
+                        <Grid Padding="24, 8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="240" />
+                            </Grid.ColumnDefinitions>
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+
+                            <Image Grid.Column="0" 
+                                   Grid.Row="0"
+                                   Grid.RowSpan="2"
+                                   HorizontalOptions="Center" 
+                                   VerticalOptions="Center"
+                                   Margin="0, -60, 0, 0"
+                                   HeightRequest="320"
+                                   Aspect="AspectFill"
+                                   Source="{Binding ImageUrl}" />
+
+                            <Label Grid.Column="1" 
+                                   Grid.Row="0"
+                                   VerticalOptions="Start"
+                                   HorizontalTextAlignment="Start"
+                                   Margin="8, 4"
+                                   Text="{Binding Name}" />
+
+                            <Label Grid.Column="1" 
+                                   Grid.Row="1"
+                                   VerticalOptions="Start"
+                                   HorizontalTextAlignment="Start"
+                                   Margin="8, 4"
+                                   Text="{Binding Description}" />
+                        </Grid>
+                    </StackLayout>
+                </ContentView>
+            </parallax:ParallaxView.BodyContent>
+        </parallax:ParallaxView>
+    </ContentPage.Content>
+</ContentPage>

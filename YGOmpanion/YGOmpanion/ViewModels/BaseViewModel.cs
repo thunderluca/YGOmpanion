@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight.Command;
+using System;
 using YGOmpanion.Services;
 
 namespace YGOmpanion.ViewModels
@@ -26,6 +27,25 @@ namespace YGOmpanion.ViewModels
         {
             get { return title; }
             set { Set(nameof(Title), ref title, value); }
+        }
+
+        private RelayCommand goBackCommand;
+        public RelayCommand GoBackCommand
+        {
+            get
+            {
+                if (goBackCommand == null)
+                {
+                    goBackCommand = new RelayCommand(GoBack);
+                }
+
+                return goBackCommand;
+            }
+        }
+
+        public void GoBack()
+        {
+            this.NavigationService.GoBack();
         }
     }
 }

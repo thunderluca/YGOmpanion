@@ -152,5 +152,53 @@ namespace YGOmpanion.Data.Models
             return cardType == CardType.Tuner || cardType == CardType.TunerEffect 
                 || cardType == CardType.FlipTunerEffect || cardType == CardType.SynchroTunerEffect;
         }
+
+        public static string GetAttribute(this Card card)
+        {
+            if (card == null)
+            {
+                throw new ArgumentNullException(nameof(card));
+            }
+
+            if (card.IsMonster()) return card.Attribute;
+
+            return card.Attribute.Split('/')[card.IsMagic() ? 0 : 1];
+        }
+
+        public static string GetCardTypes(this Card card)
+        {
+            if (card == null)
+            {
+                throw new ArgumentNullException(nameof(card));
+            }
+
+            if (!card.IsMonster()) return card.Type;
+
+            return card.Race + "/" + card.Type;
+        }
+
+        public static string GetAttack(this Card card)
+        {
+            if (card == null)
+            {
+                throw new ArgumentNullException(nameof(card));
+            }
+
+            if (!card.IsMonster()) return string.Empty;
+
+            return "ATK " + (card.Attack < 0 ? "?" : card.Attack.ToString());
+        }
+
+        public static string GetDefense(this Card card)
+        {
+            if (card == null)
+            {
+                throw new ArgumentNullException(nameof(card));
+            }
+
+            if (!card.IsMonster()) return string.Empty;
+
+            return "DEF " + (card.Defense < 0 ? "?" : card.Defense.ToString());
+        }
     }
 }

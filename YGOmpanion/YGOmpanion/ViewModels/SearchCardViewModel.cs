@@ -8,12 +8,12 @@ using YGOmpanion.Services;
 
 namespace YGOmpanion.ViewModels
 {
-    public class SearchViewModel : BaseViewModel
+    public class SearchCardViewModel : BaseViewModel
     {
         private readonly IDataService DataService;
         private readonly ICardImageService CardImageService;
 
-        public SearchViewModel(
+        public SearchCardViewModel(
             IDataService dataService, 
             ICardImageService cardImageService,
             GalaSoft.MvvmLight.Views.IDialogService dialogService,
@@ -99,22 +99,24 @@ namespace YGOmpanion.ViewModels
 
         private Card ToCard(Data.Models.Card card)
         {
-            var attack = $"ATK {(card.IsMonster() ? card.Attack < 0 ? "?" : card.Attack.ToString() : string.Empty)}";
-            var defense = $"DEF {(card.IsMonster() ? card.Defense < 0 ? "?" : card.Defense.ToString() : string.Empty)}";
-
             return new Card
             {
                 Id = card.Id,
                 Name = card.Name,
                 Description = card.Description,
-                Attribute = card.IsMonster() ? card.Attribute : card.Attribute.Split('/')[card.IsMagic() ? 0 : 1],
-                CardTypes = card.IsMonster() ? card.Race + "/" + card.Type : card.Type,
-                Attack = attack,
-                Defense = defense,
+                Attribute = card.GetAttribute(),
+                CardTypes = card.GetCardTypes(),
+                Attack = card.GetAttack(),
+                Defense = card.GetDefense(),
                 Type = card.GetCardType(),
                 IsMonster = card.IsMonster(),
                 ImageUrl = card.ImageUrl
             };
+        }
+
+        public async void GoToCard(int id)
+        {
+            await this.NavigationService.NavigateAsync(nameof(Views.CardDetailPage), id);
         }
         
         public class Card

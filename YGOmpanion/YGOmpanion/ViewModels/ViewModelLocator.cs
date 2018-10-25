@@ -28,9 +28,10 @@ namespace YGOmpanion.ViewModels
             builder.Register(c => platformService.CreateDialogServiceInstance()).As<GalaSoft.MvvmLight.Views.IDialogService>();
             builder.Register(c => navigationService).As<INavigationService>();
             builder.RegisterType<AddDeckViewModel>().AsSelf();
+            builder.RegisterType<CardDetailViewModel>().AsSelf();
             builder.RegisterType<DecksViewModel>().AsSelf();
             builder.RegisterType<MainViewModel>().AsSelf();
-            builder.RegisterType<SearchViewModel>().AsSelf();
+            builder.RegisterType<SearchCardViewModel>().AsSelf();
 
             Container = builder.Build();
 
@@ -44,9 +45,10 @@ namespace YGOmpanion.ViewModels
             var navigationService = new NavigationService();
 
             navigationService.Configure(nameof(Views.AddDeckPage), typeof(Views.AddDeckPage));
+            navigationService.Configure(nameof(Views.CardDetailPage), typeof(Views.CardDetailPage));
             navigationService.Configure(nameof(Views.DecksPage), typeof(Views.DecksPage));
             navigationService.Configure(nameof(Views.MainPage), typeof(Views.MainPage));
-            navigationService.Configure(nameof(Views.SearchPage), typeof(Views.SearchPage));
+            navigationService.Configure(nameof(Views.SearchCardPage), typeof(Views.SearchCardPage));
 
             return navigationService;
         }
@@ -54,6 +56,11 @@ namespace YGOmpanion.ViewModels
         public AddDeckViewModel AddDeck
         {
             get { return ServiceLocator.Current.GetInstance<AddDeckViewModel>(); }
+        }
+
+        public CardDetailViewModel CardDetail
+        {
+            get { return ServiceLocator.Current.GetInstance<CardDetailViewModel>(); }
         }
 
         public DecksViewModel Decks
@@ -66,9 +73,9 @@ namespace YGOmpanion.ViewModels
             get { return ServiceLocator.Current.GetInstance<MainViewModel>(); }
         }
 
-        public SearchViewModel Search
+        public SearchCardViewModel SearchCard
         {
-            get { return ServiceLocator.Current.GetInstance<SearchViewModel>(); }
+            get { return ServiceLocator.Current.GetInstance<SearchCardViewModel>(); }
         }
     }
 }

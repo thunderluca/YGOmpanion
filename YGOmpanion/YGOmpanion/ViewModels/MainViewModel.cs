@@ -45,7 +45,7 @@ namespace YGOmpanion.ViewModels
 
         private void GoToSearch()
         {
-            this.NavigationService.NavigateAsync(nameof(Views.SearchPage));
+            this.NavigationService.NavigateAsync(nameof(Views.SearchCardPage));
         }
     }
 }

@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="YGOmpanion.Views.SearchPage"
+             x:Class="YGOmpanion.Views.SearchCardPage"
              Title="{Binding Title, Mode=OneWay}"
-             BindingContext="{Binding Search, Source={StaticResource Locator}}">
+             BindingContext="{Binding SearchCard, Source={StaticResource Locator}}">
     <ContentPage.Content>
         <Grid>
             <Grid.RowDefinitions>
@@ -18,10 +18,12 @@
                        SearchCommand="{Binding SearchCommand, Mode=OneWay}"
                        Margin="12" />
 
-            <ListView Grid.Row="1" 
+            <ListView Grid.Row="1"
+                      x:Name="FoundCardsListView"
                       ItemsSource="{Binding FoundCards, Mode=OneWay}"
                       VerticalOptions="FillAndExpand"
                       IsPullToRefreshEnabled="true"
+                      ItemSelected="OnFoundCardsListViewItemSelected"
                       IsRefreshing="{Binding IsBusy, Mode=OneWay}"
                       RefreshCommand="{Binding SearchCommand, Mode=OneWay}"
                       CachingStrategy="RecycleElement"
@@ -86,8 +88,7 @@
                                            HorizontalTextAlignment="Start"
                                            TextColor="{Binding Type, Converter={StaticResource CardTypeToForegroundColorConverter}}" 
                                            Text="{Binding Description}" 
-                                           LineBreakMode="WordWrap"
-                                           MaxLines="3" />
+                                           LineBreakMode="WordWrap" />
                                     <Label Grid.Column="1" 
                                            Grid.Row="3"
                                            FontAttributes="Bold"
